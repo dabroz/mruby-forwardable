@@ -12,7 +12,7 @@
 
 module Forwardable
 
-  FILE_REGEXP = %r"#{Regexp.quote(__FILE__)}"
+  FILE_REGEXP = __FILE__
 
   @debug = nil
   class << self
@@ -45,7 +45,7 @@ module Forwardable
             instance_variable_get(accessor).__send__(method.to_sym, *args, &block)
           rescue Exception
             unless Forwardable::debug
-              $@.delete_if{|s| Forwardable::FILE_REGEXP =~ s}
+              $@.delete_if{|s| s[Forwardable::FILE_REGEXP] }
             end
             ::Kernel::raise
           end
